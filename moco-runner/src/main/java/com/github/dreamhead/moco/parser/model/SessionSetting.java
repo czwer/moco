@@ -31,6 +31,7 @@ public final class SessionSetting {
     private EventSetting on;
     private ProxyContainer proxy;
     private ResourceSetting resource;
+    private MultiEventSetting multiEvent;
 
     private boolean isMount() {
         return this.mount != null;
@@ -51,6 +52,7 @@ public final class SessionSetting {
                 .add("proxy", proxy)
                 .add("on", on)
                 .add("resource", resource)
+                .add("multiEvent", multiEvent)
                 .toString();
     }
 
@@ -79,6 +81,11 @@ public final class SessionSetting {
 
         if (hasEvent()) {
             for (MocoEventTrigger trigger : on.triggers()) {
+                setting.on(trigger);
+            }
+        }
+        if (hasMultiEvent()) {
+            for (MocoEventTrigger trigger : multiEvent.triggers()) {
                 setting.on(trigger);
             }
         }
@@ -125,6 +132,10 @@ public final class SessionSetting {
 
     private boolean hasEvent() {
         return this.on != null;
+    }
+
+    private boolean hasMultiEvent() {
+        return this.multiEvent != null;
     }
 
     public boolean isResource() {
