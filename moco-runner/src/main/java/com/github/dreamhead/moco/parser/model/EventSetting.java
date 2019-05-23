@@ -5,16 +5,24 @@ import com.github.dreamhead.moco.Moco;
 import com.github.dreamhead.moco.MocoEventTrigger;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 import static com.google.common.collect.ImmutableList.of;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public final class EventSetting {
-    private CompleteEventSetting complete;
+    private List<CompleteEventSetting> completeList;
 
     public ImmutableList<MocoEventTrigger> triggers() {
-        if (complete != null) {
-            return of(Moco.complete(complete.createTrigger()));
+        if (completeList != null) {
+            List<MocoEventTrigger> mocoEventTriggerList = Lists.newArrayList();
+            for (CompleteEventSetting completeEventSetting : completeList){
+                MocoEventTrigger mocoEventTrigger = Moco.complete(completeEventSetting.createTrigger());
+                mocoEventTriggerList.add(mocoEventTrigger);
+            }
+            return ImmutableList.copyOf(mocoEventTriggerList);
         }
 
         return of();
@@ -24,7 +32,7 @@ public final class EventSetting {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .omitNullValues()
-                .add("complete", complete)
+                .add("completeList", completeList)
                 .toString();
     }
 }
